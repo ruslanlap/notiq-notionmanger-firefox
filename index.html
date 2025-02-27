@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>OAuth Redirect</title>
+    <script>
+        window.onload = function () {
+            const params = new URLSearchParams(window.location.search);
+            const code = params.get("code");
+            if (code) {
+                fetch("https://api.notion.com/v1/oauth/token", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Authorization": "Basic " + btoa("YOUR_CLIENT_ID:YOUR_CLIENT_SECRET"),
+                    },
+                    body: JSON.stringify({
+                        grant_type: "authorization_code",
+                        code: code,
+                        redirect_uri: "https://your-redirect-url.github.io/",
+                    }),
+                })
+                .then(response => response.json())
+                .then(data => console.log("Access Token:", data.access_token))
+                .catch(error => console.error("Error:", error));
+            }
+        };
+    </script>
+</head>
+<body>
+    <h2>Processing OAuth...</h2>
+</body>
+</html>
