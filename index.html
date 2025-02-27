@@ -1,56 +1,32 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Processing OAuth...</title>
-    <script>
-        window.onload = function() {
-            const params = new URLSearchParams(window.location.search);
-            const code = params.get("code");
-            const state = params.get("state");
-            
-            if (!code) {
-                document.getElementById("status").textContent = "Error: No authorization code received.";
-                return;
-            }
-            
-            // This will communicate with your extension
-            if (window.browser) {
-                // Firefox
-                browser.runtime.sendMessage({
-                    action: "exchangeCodeForToken",
-                    code: code,
-                    state: state,
-                    redirectUri: "https://ruslanlap.github.io/notiq-notionmanger-firefox/"
-                }).then(response => {
-                    if (response.success) {
-                        document.getElementById("status").textContent = "Authorization successful! You can close this tab.";
-                    } else {
-                        document.getElementById("status").textContent = "Error: " + (response.error || "Unknown error");
-                    }
-                }).catch(error => {
-                    document.getElementById("status").textContent = "Failed to communicate with extension: " + error.message;
-                });
-            } else if (window.chrome) {
-                // Chrome
-                chrome.runtime.sendMessage({
-                    action: "exchangeCodeForToken",
-                    code: code,
-                    state: state,
-                    redirectUri: "https://ruslanlap.github.io/notiq-notionmanger-firefox/"
-                }, response => {
-                    if (response && response.success) {
-                        document.getElementById("status").textContent = "Authorization successful! You can close this tab.";
-                    } else {
-                        document.getElementById("status").textContent = "Error: " + (response?.error || "Unknown error");
-                    }
-                });
-            } else {
-                document.getElementById("status").textContent = "Error: Browser extension not detected.";
-            }
-        };
-    </script>
+    <title>Notiq - Notion Authorization</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            text-align: center;
+        }
+        h1 {
+            color: #37352f;
+        }
+        .status {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 4px;
+            background-color: #f5f5f5;
+        }
+    </style>
 </head>
 <body>
-    <h2 id="status">Processing OAuth...</h2>
+    <h1>Notiq Notion Manager</h1>
+    <div class="status">
+        <p>Authorizing with Notion...</p>
+        <p>Please wait while we complete the authorization process.</p>
+        <p>If nothing happens after a few seconds, the browser extension may not be correctly installed.</p>
+    </div>
 </body>
 </html>
